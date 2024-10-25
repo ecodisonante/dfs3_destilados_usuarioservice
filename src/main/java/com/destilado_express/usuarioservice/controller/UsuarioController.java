@@ -1,4 +1,4 @@
-package com.ecodisonante.destilado_express.controller;
+package com.destilado_express.usuarioservice.controller;
 
 public class UsuarioController {
     

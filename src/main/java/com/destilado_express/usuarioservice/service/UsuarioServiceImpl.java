@@ -1,10 +1,10 @@
-package com.ecodisonante.destilado_express.service;
+package com.destilado_express.usuarioservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ecodisonante.destilado_express.model.Usuario;
-import com.ecodisonante.destilado_express.repository.UsuarioRepository;
+import com.destilado_express.usuarioservice.model.Usuario;
+import com.destilado_express.usuarioservice.repository.UsuarioRepository;
 
 import java.util.List;
 
@@ -20,6 +20,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     public Usuario getUsuarioById(Long id) {
         return usuarioRepository.findById(id).orElse(null);
+    }
+
+    public Usuario getUsuarioByEmail(String email) {
+        return usuarioRepository.findByEmail(email).orElse(null);
     }
 
     public Usuario crearUsuario(Usuario usuario) {

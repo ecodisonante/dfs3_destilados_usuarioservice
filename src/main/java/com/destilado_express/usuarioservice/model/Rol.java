@@ -1,4 +1,4 @@
-package com.ecodisonante.destilado_express.model;
+package com.destilado_express.usuarioservice.model;
 
 import java.util.List;
 
@@ -18,7 +18,6 @@ public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
 
     @OneToMany(mappedBy = "rol")

@@ -1,6 +1,6 @@
-package com.ecodisonante.destilado_express.service;
+package com.destilado_express.usuarioservice.service;
 
-import com.ecodisonante.destilado_express.model.Usuario;
+import com.destilado_express.usuarioservice.model.Usuario;
 import java.util.List;
 
 public interface UsuarioService {
@@ -8,6 +8,8 @@ public interface UsuarioService {
     List<Usuario> getAllUsuarios();
 
     Usuario getUsuarioById(Long id);
+
+    Usuario getUsuarioByEmail(String email);
 
     Usuario crearUsuario(Usuario usuario);
 
