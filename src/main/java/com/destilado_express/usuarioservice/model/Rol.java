@@ -1,12 +1,9 @@
 package com.destilado_express.usuarioservice.model;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +19,6 @@ public class Rol {
 
     public Rol(Long id, String nombre) {
         this.id = id;
-        this.nombre = nombre;   
+        this.nombre = nombre;
     }
 }
