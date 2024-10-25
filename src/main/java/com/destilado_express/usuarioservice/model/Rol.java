@@ -20,9 +20,6 @@ public class Rol {
     private Long id;
     private String nombre;
 
-    @OneToMany(mappedBy = "rol")
-    private List<Usuario> usuarios;
-
     public Rol(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;   
