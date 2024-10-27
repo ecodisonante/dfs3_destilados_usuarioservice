@@ -34,8 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     return new UsernameNotFoundException(message);
                 });
 
-        log.info("Usuario encontrado: " + usuario.getEmail());
-        log.info("Rol del usuario: " + usuario.getRol().getNombre());
+        log.info("Usuario encontrado: " + usuario.getEmail() + "Rol: " + usuario.getRol().getNombre());
 
         // Convertir rol a GrantedAuthority "ROLE_ADMIN"
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + usuario.getRol().getNombre().toUpperCase());
