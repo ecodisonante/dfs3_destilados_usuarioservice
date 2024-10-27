@@ -2,7 +2,13 @@ package com.destilado_express.usuarioservice.config;
 
 import java.io.IOException;
 
+import java.util.List;
+import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,7 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // Excluir login de la validación del token
         String path = request.getRequestURI();
-        return path.startsWith("/api/auth/login");  
+        return path.startsWith("/api/auth/login");
     }
 
     @Autowired
@@ -46,6 +52,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Token valido, contiuar
         if (username != null && role != null && jwtService.validateToken(token)) {
+            // Agregar roles al usuario
+            List<GrantedAuthority> authorities = Collections
+                    .singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+                    null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
             filterChain.doFilter(request, response);
         } else {
             // Token invalido, rechazar

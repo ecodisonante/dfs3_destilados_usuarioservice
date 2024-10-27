@@ -21,8 +21,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-        @Autowired
-    private JwtRequestFilter jwtRequestFilter;  // El filtro que se encargará de validar el JWT
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -37,18 +37,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)  // Desactivar CSRF (si es necesario, dependiendo de tu arquitectura)
-            .authorizeHttpRequests((req) -> req
-                .requestMatchers(HttpMethod.GET, "/api/usuarios").permitAll()  // Permitir acceso al GET de usuarios (ajustar según tus necesidades)
-                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()  // Permitir acceso al login sin autenticación
-                .requestMatchers(HttpMethod.PUT, "/api/usuarios").authenticated()  // Requiere autenticación para actualizar usuarios
-                .requestMatchers(HttpMethod.DELETE, "/api/usuarios").hasRole("ADMIN")  // Solo admin puede borrar usuarios
-                .anyRequest().authenticated())  // Todas las demás solicitudes requieren autenticación
-            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);  // Agregar el filtro para validar JWT
+                .authorizeHttpRequests((req) -> req
+                        // acceso publico
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        // solo registrados
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios").authenticated()
+                        // solo admin
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios").hasRole("ADMIN")
+                        // otros
+                        .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
     @Bean
     public UserDetailsService userDetailsService() {
