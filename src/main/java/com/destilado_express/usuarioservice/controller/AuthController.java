@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.destilado_express.usuarioservice.model.AuthRequest;
 import com.destilado_express.usuarioservice.model.AuthResponse;
+import com.destilado_express.usuarioservice.model.Usuario;
 import com.destilado_express.usuarioservice.service.JwtService;
+import com.destilado_express.usuarioservice.service.UsuarioService;
 
 import lombok.extern.java.Log;
 
@@ -28,6 +30,9 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
@@ -35,10 +40,12 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 
-            // Si la autenticación es correcta, generar el token JWT
-            String token = jwtService.generateToken(authentication.getName());
+            // Obtener usuario para ver rol
+            Usuario user = usuarioService.getUsuarioByEmail(authRequest.getEmail());
 
-            // Retornar el token en la respuesta
+            // Generar token
+            String token = jwtService.generateToken(authentication.getName(), user.getRol().getNombre());
+            
             return ResponseEntity.ok(new AuthResponse(token));
         } catch (Exception e) {
             log.severe(e.getMessage() + "\n" + e.getStackTrace());

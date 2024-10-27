@@ -23,7 +23,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Crear datos parametricos
         Rol admin = new Rol(1L, "ADMIN");
-        Rol cliente = new Rol(2L, "CLIENTE");
+        Rol cliente = new Rol(2L, "USER");
 
         // Poblar Roles
         if (rolRepository.count() == 0) {

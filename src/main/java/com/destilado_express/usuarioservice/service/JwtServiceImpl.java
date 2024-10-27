@@ -2,9 +2,7 @@ package com.destilado_express.usuarioservice.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,15 +14,16 @@ public class JwtServiceImpl implements JwtService {
 
     private final String SECRET_KEY = "Juro solemnemente que mis intenciones no son buenas";
 
-
     private SecretKey getSigningKey() {
         byte[] keyBytes = SECRET_KEY.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Override
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
+        
         return Jwts.builder()
                 .claims().empty().add(claims).and()
                 .subject(username)
@@ -57,5 +56,15 @@ public class JwtServiceImpl implements JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    // Método para extraer el rol del usuario desde el token
+    public String extractRole(String token) {
+        return (String) Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role"); // Extraer el rol del payload
     }
 }
